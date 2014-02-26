@@ -1,5 +1,5 @@
-(defproject putting-it-all-together "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject firmata-web-example "0.1.0-SNAPSHOT"
+  :description "An example connecting an ardiuno with an analog sensor to the web."
   :url "http://example.com/FIXME"
 
   :source-paths ["src" "src/clj"]

@@ -4,7 +4,7 @@
             [clojure.core.async :as a]
             [clj-time.local :as lt]
             [firmata.core :as firmata]
-            [firmata.util]
+            [firmata.receiver]
             [taoensso.timbre :refer [trace debug info warn error fatal spy with-log-level]]))
 
 (def NOTIFICATION_PORT 10)
@@ -91,12 +91,12 @@
 
 (defn pull-events
   [board]
-  (let [receiver (firmata.util/on-analog-event board ANALOG_PORT #(a/go (a/>! sensor-reading %)))]
+  (let [receiver (firmata.receiver/on-analog-event board ANALOG_PORT #(a/go (a/>! sensor-reading %)))]
     (debug "Enabling analog event reporting on A0")
     (firmata/enable-analog-in-reporting board ANALOG_PORT true)
     (debug "Ready to receive sensor readings")
     receiver))
 
 (defn stop-events [board receiver]
-  (firmata.util/stop-receiver receiver)
+  (firmata.receiver/stop-receiver! receiver)
   (firmata/enable-analog-in-reporting board ANALOG_PORT false))
