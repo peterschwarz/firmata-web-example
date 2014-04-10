@@ -15,36 +15,32 @@
     :refer (trace debug info warn error fatal spy with-log-level)]
    [ring.util.response :refer [file-response]]))
 
+(def board (atom nil))
 
-
-(defn create-app-routes
-  [board]
-  (defroutes app-routes
-    (GET "/" []
-         (file-response "index.html" {:root "resources/public"}))
-    (GET "/async" [] (create-async-handler board)) ;; asynchronous(long polling)
-    (route/resources "/") ; {:root "resources"})
-    (route/not-found "Not Found"))
-
-  app-routes)
+(defroutes app-routes
+  (GET "/" []
+       (file-response "index.html" {:root "resources/public"}))
+  (GET "/async" [] (create-async-handler @board)) ;; asynchronous(long polling)
+  (route/resources "/") ; {:root "resources"})
+  (route/not-found "Not Found"))
 
 
 (defn app [board]
-  (-> (handler/site (create-app-routes board))
+  (-> (handler/site (app-routes))
       (wrap-timbre {})))
 
 (defn -main [& args]
 
   (let [port-name (first args)
-        board (open-board port-name)
-        receiver (pull-events board)]
+        _ (reset! board (open-board port-name))
+        receiver (pull-events @board)]
     (info "Connected to board")
 
     (.addShutdownHook (Runtime/getRuntime)
                       (Thread. (fn []
                                  (info "Disconnecting")
-                                 (stop-events board receiver)
-                                 (close! board))))
+                                 (stop-events @board receiver)
+                                 (close! @board))))
 
     (run-server (app board) {:port 3000})))
 
