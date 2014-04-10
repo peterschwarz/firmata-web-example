@@ -37,12 +37,8 @@
 
   (let [port-name (first args)
         board (open-board port-name)
-        version (<!! (:channel board))
-        firmware (<!! (:channel board))
         receiver (pull-events board)]
     (info "Connected to board")
-    (info "Firmata version: " (:version version))
-    (info "Firmaware name: " (:name firmware))
 
     (.addShutdownHook (Runtime/getRuntime)
                       (Thread. (fn []

@@ -16,7 +16,7 @@
                  [org.clojure/clojurescript "0.0-2014"
                   :exclusions [org.apache.ant/ant]]
                  [domina "1.0.2"]
-                 [clj-firmata "1.0.0-SNAPSHOT"]]
+                 [clj-firmata "1.0.0"]]
 
   :plugins [[lein-cljsbuild "1.0.2"]]
 
