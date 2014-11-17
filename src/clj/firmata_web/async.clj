@@ -1,7 +1,7 @@
 (ns firmata-web.async
   (:require [org.httpkit.server :as httpkit]
             [clojure.edn :as edn]
-            [clojure.core.async :as a]
+            [clojure.core.async :as a :refer [>! <!]]
             [clj-time.local :as lt]
             [firmata.core :as firmata]
             [firmata.receiver]
